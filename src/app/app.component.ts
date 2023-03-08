@@ -16,7 +16,7 @@ export class AppComponent {
     this.getData();
   }
 
-  getData() {
+  getData(): void {
     this.appService.getData().subscribe((value) => {
       this.messages = value;
       this.messagesShow = value;
