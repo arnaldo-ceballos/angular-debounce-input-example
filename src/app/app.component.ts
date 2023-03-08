@@ -14,11 +14,19 @@ import { fromEvent } from 'rxjs';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  public consoleMessages: string[] = [];
+  public messages: string[] = [];
+  public messagesShow: string[] = [];
   @ViewChild('input') input: ElementRef;
 
   constructor(private appService: AppService) {
     this.getData();
+  }
+
+  getData() {
+    this.appService.getData().subscribe((value) => {
+      this.messages = value;
+      this.messagesShow = value;
+    });
   }
 
   ngAfterViewInit() {
@@ -28,20 +36,15 @@ export class AppComponent {
         debounceTime(3000),
         distinctUntilChanged(),
         tap(() => {
-          this.getData(this.input.nativeElement.value);
+          this.searchData(this.input.nativeElement.value);
         })
       )
       .subscribe();
   }
 
-  getData(text?: string) {
-    this.appService.getData().subscribe((value) => {
-      this.consoleMessages = value;
-      if (text) {
-        this.consoleMessages = this.consoleMessages.filter((data) =>
-          data.toLowerCase().includes(text.toLowerCase())
-        );
-      }
-    });
+  searchData(text: string) {
+    this.messagesShow = this.messages.filter((data) =>
+      data.toLowerCase().includes(text.toLowerCase())
+    );
   }
 }
