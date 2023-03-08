@@ -1,11 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  tap,
-  map,
-} from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 import { AppService } from './app.service';
 import { fromEvent } from 'rxjs';
 @Component({
@@ -32,9 +26,7 @@ export class AppComponent {
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
-        filter(Boolean),
         debounceTime(3000),
-        distinctUntilChanged(),
         tap(() => {
           this.searchData(this.input.nativeElement.value);
         })
